@@ -1,0 +1,30 @@
+# This code works!
+
+# Example QT code from website (to create a GUI program)
+# Message shows up for 3000 ms
+# Click on menu 'Set Window Title' to see other menus
+# pip install pyQt5
+# resource: https://www.youtube.com/watch?v=KelQniuWe-I
+
+# Libraries
+import sys
+from PyQt5 import QtWidgets
+
+app = QtWidgets.QApplication(sys.argv)
+x = QtWidgets.QMainWindow()
+
+menubar = x.menuBar()
+menu = menubar.addMenu('Set Window Title')
+vegeAction = menu.addAction('Vege')
+menu.addSeparator()
+hamAction = menu.addAction('Ham')
+
+vegFunc = lambda:x.setWindowTitle('Vege')
+hamFunc = lambda:x.setWindowTitle('Ham')
+vegeAction.triggered.connect(vegFunc)
+hamAction.triggered.connect(hamFunc)
+sb = x.statusBar()
+sb.showMessage("Hello Beautiful!", 3000)
+
+x.show()
+sys.exit(app.exec_())
