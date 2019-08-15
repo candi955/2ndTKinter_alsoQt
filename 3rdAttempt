@@ -1,0 +1,38 @@
+# This code works!
+
+# https://stackoverflow.com/questions/26629695/how-to-display-content-of-pandas-data-frame-in-tkinter-gui-window
+
+import pandas as pd
+import numpy as np
+import sys
+from tkinter import *
+import xlrd
+
+# Creating a lottoSVM prediction method to predict success of predicting the dependent y variable
+# Creating variable to convert excel file to a dataframe, so can split data into independent (X) and
+# dependent (y) variables
+lottoExcel = xlrd.open_workbook('PastWinningNum_SVM_Excel.xlsx')
+# Creating variable to convert excel file to a dataframe (using pandas)
+sheets = lottoExcel.sheets()
+for sheet in sheets:
+    lottoSheetData = np.array([[sheet.cell_value(r, c) for c in range(sheet.ncols)] for r in range(sheet.nrows)])
+    #lottoSheetData_DataFrame = pd.DataFrame(lottoSheetData)
+    # print('\n' + '\n' + 'LottoSheet Data, DataFrame(excel) format:')
+    # print(lottoSheetData_DataFrame)
+
+###################################################################################################################
+
+df = pd.DataFrame(lottoSheetData)
+root = Tk()
+t1 = Text(root)
+t1.pack()
+
+class PrintToT1(object):
+
+ def write(self, s):
+     t1.insert(END, s)
+sys.stdout = PrintToT1()
+print('Original Dataset (White Balls, Red Ball, and Corresponding Month)')
+print(df)
+
+mainloop()
