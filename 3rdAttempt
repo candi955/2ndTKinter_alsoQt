@@ -1,10 +1,10 @@
 # This code works!
-
+# Calling an excel form and placing it in GUI format utilizing Tkinter
+# This code is for referencing how to perform placing an excel file into GUI
 # https://stackoverflow.com/questions/26629695/how-to-display-content-of-pandas-data-frame-in-tkinter-gui-window
 
 import pandas as pd
 import numpy as np
-import sys
 from tkinter import *
 import xlrd
 
@@ -28,11 +28,16 @@ t1 = Text(root)
 t1.pack()
 
 class PrintToT1(object):
+    def write(self, s):
+        t1.insert(END, s)
 
- def write(self, s):
-     t1.insert(END, s)
+    def flush(self):
+        pass
+
+###################################################################################################################
 sys.stdout = PrintToT1()
 print('Original Dataset (White Balls, Red Ball, and Corresponding Month)')
 print(df)
+
 
 mainloop()
