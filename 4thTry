@@ -48,18 +48,33 @@ y_pred = model.predict(X_test)
 knn = KNeighborsClassifier(n_neighbors=1)
 knn.fit(X, y)
 ###################################################################################################################
-root = Tk()
-root.title('Lottery Number Month Predictor')
-root.geometry("1000x1000")
-t1 = Text(root)
-t1.pack()
+root = tk.Tk()
+root.title('Lottery Prediction Project')
+#root.geometry("1000x1000")
+style = ttk.Style(root)
+style.configure('lefttab.TNotebook', tabposition='wn')
+
+# Tabs and Frames
+tab_control = ttk.Notebook(root)
+tab1 = ttk.Frame(tab_control)
+tab2 = ttk.Frame(tab_control)
+tab3 = ttk.Frame(tab_control)
+tab_control.add(tab1, text='Dataset')
+tab_control.add(tab2, text='Prediction Accuracy')
+tab_control.add(tab3, text='Dummy Value Entry')
+
+
+tab_control.pack(expand=1, fill='both')
+
+#t1 = Text(root)
+#t1.pack()
 
 ###################################################################################################################
 
 def writeDataset():
-    t1.insert(1.0, pd.DataFrame(df))
+    tab1_display.insert(1.0, pd.DataFrame(df))
 def writeAccuracy():
-    t1.insert(4.0, str(accuracy_score(y_test, y_pred)))
+    tab2_display.insert(4.0, str(accuracy_score(y_test, y_pred)))
 
 #def dummyValues():
     #input_text = input_box.get('1.0', tk.end)
@@ -72,14 +87,49 @@ def writeAccuracy():
 def flush(self):
     pass
 ###################################################################################################################
+# Labels for tabs
+l1 = Label(tab1, text='Please click the button below to scroll through the original dataset model.', padx=5, pady=5)
+l1.grid(row=1, column=0)
+l2 = Label(tab2, text='Please click the button below to see the prediction accuracy of the model in decimal ' +
+                      'format.', padx=5, pady=5)
+l2.grid(row=1, column=0)
+l3 = Label(tab3, text='Please enter five dummy numbers in the cells below,\n and then click the Prediction button to ' +
+                      'see your prediction results:', padx=5, pady=5)
+l3.grid(row=1, column=0)
+
+# Dummy Number Input Boxes
+dummyNumberOne = ScrolledText(tab3, height=1)
+dummyNumberOne.grid(row=2, column=0, columnspan=1, padx=5, pady=5)
+dummyNumberTwo = ScrolledText(tab3, height=1)
+dummyNumberTwo.grid(row=3, column=0, columnspan=1, padx=5, pady=5)
+dummyNumberThree = ScrolledText(tab3, height=1)
+dummyNumberThree.grid(row=4, column=0, columnspan=1, padx=5, pady=5)
+dummyNumberFour = ScrolledText(tab3, height=1)
+dummyNumberFour.grid(row=5, column=0, columnspan=1, padx=5, pady=5)
+dummyNumberFive = ScrolledText(tab3, height=1)
+dummyNumberFive.grid(row=6, column=0, columnspan=1, padx=5, pady=5)
 
 # Dataset Button
-datasetButton = Button(t1, text='Dataset', command=writeDataset, width=12, bg='purple', fg='#fff')
-datasetButton.grid(row=1, column=500, padx=500, pady=100)
+datasetButton = Button(tab1, text='Dataset', command=writeDataset, width=12, bg='purple', fg='#fff')
+datasetButton.grid(row=15, column=0, padx=15, pady=15)
 
-# Dataset Button
-AccuracyButton = Button(t1, text='Prediction Accuracy', command=writeAccuracy, width=20, bg='purple', fg='#fff')
-AccuracyButton.grid(row=2, column=500, padx=500, pady=200)
+# Accuracy Button
+AccuracyButton = Button(tab2, text='Prediction Accuracy', command=writeAccuracy, width=20, bg='purple', fg='#fff')
+AccuracyButton.grid(row=15, column=0, padx=15, pady=15)
+
+# Dummy number Button to start algorithm calculation and display prediction results
+AccuracyButton = Button(tab3, text='Click to see Prediction Results', command=writeAccuracy, width=25, bg='purple', fg='#fff')
+AccuracyButton.grid(row=7, column=0, padx=5, pady=5)
+
+# Display Screen for Result
+tab1_display = ScrolledText(tab1)
+tab1_display.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
+
+tab2_display = ScrolledText(tab2)
+tab2_display.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
+
+tab3_display = ScrolledText(tab3)
+tab3_display.grid(row=8, column=0, columnspan=3, padx=5, pady=5)
 
 # Keep window alive
 mainloop()
