@@ -76,8 +76,66 @@ def writeDataset():
 def writeAccuracy():
     tab2_display.insert(4.0, str(accuracy_score(y_test, y_pred)))
 
-#def dummyValues():
-    #input_text = input_box.get('1.0', tk.end)
+def dummyValues():
+    while True:
+        try:
+            dummyTextOne = dummyNumberOne.get('1.0', tk.END)
+            dummyTextTwo = dummyNumberTwo.get('1.0', tk.END)
+            dummyTextThree = dummyNumberThree.get('1.0', tk.END)
+            dummyTextFour = dummyNumberFour.get('1.0', tk.END)
+            dummyTextFive = dummyNumberFive.get('1.0', tk.END)
+
+            # changing dummy numbers to integers for algorithm processing
+            dummyValues.dummyTextOne = int(dummyTextOne)
+            dummyValues.dummyTextTwo = int(dummyTextTwo)
+            dummyValues.dummyTextThree = int(dummyTextThree)
+            dummyValues.dummyTextFour = int(dummyTextFour)
+            dummyValues.dummyTextFive = int(dummyTextFive)
+
+        # exception handling, basically stating 'if the above previous is not true, then do this). Once a statement
+        # is made, the program brings the user back to the main menu by calling the Predictions class and menu
+        # method
+        except ValueError:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+
+        if dummyValues.dummyTextOne < 1 or dummyValues.dummyTextOne > 69:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+        if dummyValues.dummyTextTwo < 1 or dummyValues.dummyTextTwo > 69:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+        if dummyValues.dummyTextThree < 1 or dummyValues.dummyTextThree > 69:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+        if dummyValues.dummyTextFour < 1 or dummyValues.dummyTextFour > 69:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+        if dummyValues.dummyTextFive < 1 or dummyValues.dummyTextFive > 69:
+            tab3_display.insert(4.0, str('Please enter a number between 1 and 69.'))
+            exit()
+
+        else:
+            # breaking the loop to avoid infinite loop
+            break
+
+def finalPrediction():
+        #calling dummy values function to call variables from that function
+        dummyValues()
+        # turning the dummy values, which were string then integer, back into an array for the prediction
+        a = np.array([dummyValues.dummyTextOne, dummyValues.dummyTextTwo, dummyValues.dummyTextThree,
+                      dummyValues.dummyTextFour, dummyValues.dummyTextFive])
+
+        # inserting dummy array variable as argument to K-nearest neighbor algorithm to create prediction, which is
+        # placed within the prediction variable
+        prediction = knn.predict([a])
+        tab3_display.insert(4.0, prediction)
+
     #processed_text = input_text
     #t1.insert(tk.END, processed_text)
 
@@ -118,8 +176,8 @@ AccuracyButton = Button(tab2, text='Prediction Accuracy', command=writeAccuracy,
 AccuracyButton.grid(row=15, column=0, padx=15, pady=15)
 
 # Dummy number Button to start algorithm calculation and display prediction results
-AccuracyButton = Button(tab3, text='Click to see Prediction Results', command=writeAccuracy, width=25, bg='purple', fg='#fff')
-AccuracyButton.grid(row=7, column=0, padx=5, pady=5)
+PredictionButton = Button(tab3, text='Click to see Prediction Results', command=finalPrediction, width=25, bg='purple', fg='#fff')
+PredictionButton.grid(row=7, column=0, padx=5, pady=5)
 
 # Display Screen for Result
 tab1_display = ScrolledText(tab1)
