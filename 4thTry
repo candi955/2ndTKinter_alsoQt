@@ -1,0 +1,85 @@
+# Attempting to add SVM model as GUI, 4th attempt
+# Code is working!
+
+# Libraries
+import tkinter as tk
+from tkinter import *
+# Window Tabs Libraries
+from tkinter import ttk
+from tkinter.scrolledtext import *
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+import xlrd
+
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+# pulling excel file and creating variable
+lottoExcel = xlrd.open_workbook('PastWinningNum_SVM_Excel.xlsx')
+# Creating variable to convert excel file to a dataframe (using pandas)
+sheets = lottoExcel.sheets()
+for sheet in sheets:
+    lottoSheetData = np.array([[sheet.cell_value(r, c) for c in range(sheet.ncols)] for r in range(sheet.nrows)])
+    #lottoSheetData_DataFrame = pd.DataFrame(lottoSheetData)
+    # print('\n' + '\n' + 'LottoSheet Data, DataFrame(excel) format:')
+    # print(lottoSheetData_DataFrame)
+# creating dataframe for tkinter
+df = pd.DataFrame(lottoSheetData)
+
+sources = lottoSheetData[:, :-2]
+target = lottoSheetData[:, len(lottoSheetData[0]) - 1]
+
+sourceNoHeader = np.delete(sources, (0), axis=0)
+targetNoHeader = np.delete(target, (0), axis=0)
+
+X = sourceNoHeader
+y = targetNoHeader
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=50)
+
+model = svm.SVC(kernel='linear')
+model.fit(X_train, y_train.ravel())
+y_pred = model.predict(X_test)
+
+knn = KNeighborsClassifier(n_neighbors=1)
+knn.fit(X, y)
+###################################################################################################################
+root = Tk()
+root.title('Lottery Number Month Predictor')
+root.geometry("1000x1000")
+t1 = Text(root)
+t1.pack()
+
+###################################################################################################################
+
+def writeDataset():
+    t1.insert(1.0, pd.DataFrame(df))
+def writeAccuracy():
+    t1.insert(4.0, str(accuracy_score(y_test, y_pred)))
+
+#def dummyValues():
+    #input_text = input_box.get('1.0', tk.end)
+    #processed_text = input_text
+    #t1.insert(tk.END, processed_text)
+
+#def clear_display_result():
+    #t1.delete(1.0, END)
+
+def flush(self):
+    pass
+###################################################################################################################
+
+# Dataset Button
+datasetButton = Button(t1, text='Dataset', command=writeDataset, width=12, bg='purple', fg='#fff')
+datasetButton.grid(row=1, column=500, padx=500, pady=100)
+
+# Dataset Button
+AccuracyButton = Button(t1, text='Prediction Accuracy', command=writeAccuracy, width=20, bg='purple', fg='#fff')
+AccuracyButton.grid(row=2, column=500, padx=500, pady=200)
+
+# Keep window alive
+mainloop()
